@@ -38,7 +38,7 @@ userSchema.virtual('friendCount').get(function () {
   return this.friends.length;
 });
 
-const Users = mongoose.model('users', userSchema);
+const User = mongoose.model('User', userSchema);
 
-module.exports = Users;
+module.exports = User;
 

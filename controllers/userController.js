@@ -1,9 +1,9 @@
-const { Users } = require('../models');
+const { User } = require('../models');
 
 const userController = {
   // GET all users
   getAllUsers(req, res) {
-    Users.find()
+    User.find()
       .populate('thoughts')
       .populate('friends')
       .then(users => res.json(users))
@@ -15,7 +15,7 @@ const userController = {
 
   // GET a single user by id
   getUserById({ params }, res) {
-    Users.findById(params.userId)
+    User.findById(params.userId)
       .populate('thoughts')
       .populate('friends')
       .then(user => {
@@ -33,7 +33,7 @@ const userController = {
 
   // POST create a new user
   createUser({ body }, res) {
-    Users.create(body)
+    User.create(body)
       .then(user => res.json(user))
       .catch(err => {
         console.log(err);
@@ -43,7 +43,7 @@ const userController = {
 
   // PUT update a user by id
   updateUser({ params, body }, res) {
-    Users.findByIdAndUpdate(params.userId, body, { new: true, runValidators: true })
+    User.findByIdAndUpdate(params.userId, body, { new: true, runValidators: true })
       .then(user => {
         if (!user) {
           res.status(404).json({ message: 'No user found with this id' });
@@ -59,7 +59,7 @@ const userController = {
 
   // DELETE remove a user by id
   deleteUser({ params }, res) {
-    Users.findByIdAndDelete(params.userId)
+    User.findByIdAndDelete(params.userId)
       .then(user => {
         if (!user) {
           res.status(404).json({ message: 'No user found with this id' });
@@ -75,7 +75,7 @@ const userController = {
 
   // POST add a friend to a user's friend list
   addFriend({ params }, res) {
-    Users.findByIdAndUpdate(
+    User.findByIdAndUpdate(
       params.userId,
       { $addToSet: { friends: params.friendId } },
       { new: true, runValidators: true }
@@ -95,7 +95,7 @@ const userController = {
 
   // DELETE remove a friend from a user's friend list
   removeFriend({ params }, res) {
-    Users.findByIdAndUpdate(
+    User.findByIdAndUpdate(
       params.userId,
       { $pull: { friends: params.friendId } },
       { new: true, runValidators: true }

@@ -5,7 +5,7 @@ const thoughtSchema = new mongoose.Schema(
     thoughtText: {
       type: String,
       required: true,
-      maxlength: 280, // Maximum length of 280 characters
+      maxlength: 280,
     },
     username: {
       type: String,
@@ -20,7 +20,7 @@ const thoughtSchema = new mongoose.Schema(
         reactionBody: {
           type: String,
           required: true,
-          maxlength: 280, // Maximum length of 280 characters
+          maxlength: 280, 
         },
         username: {
           type: String,
@@ -43,6 +43,6 @@ thoughtSchema.virtual('reactionCount').get(function () {
   return this.reactions.length;
 });
 
-const Thoughts = mongoose.model('thoughts', thoughtSchema);
+const Thought = mongoose.model('Thought', thoughtSchema);
 
-module.exports = Thoughts;
+module.exports = Thought;

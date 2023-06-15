@@ -1,4 +1,6 @@
 const { User } = require('../models');
+const { Types: { ObjectId } } = require('mongoose');
+
 
 const userController = {
   // GET all users
@@ -15,7 +17,10 @@ const userController = {
 
   // GET a single user by id
   getUserById({ params }, res) {
-    User.findById(params.userId)
+    const userId = params.userId;
+    const objectIdUserId = new ObjectId(userId);
+
+    User.findById(objectIdUserId)
       .populate('thoughts')
       .populate('friends')
       .then(user => {
@@ -43,7 +48,10 @@ const userController = {
 
   // PUT update a user by id
   updateUser({ params, body }, res) {
-    User.findByIdAndUpdate(params.userId, body, { new: true, runValidators: true })
+    const userId = params.userId;
+    const objectIdUserId = new ObjectId(userId);
+
+    User.findByIdAndUpdate(objectIdUserId, body, { new: true, runValidators: true })
       .then(user => {
         if (!user) {
           res.status(404).json({ message: 'No user found with this id' });
@@ -59,7 +67,10 @@ const userController = {
 
   // DELETE remove a user by id
   deleteUser({ params }, res) {
-    User.findByIdAndDelete(params.userId)
+    const userId = params.userId;
+    const objectIdUserId = new ObjectId(userId);
+
+    User.findByIdAndDelete(objectIdUserId)
       .then(user => {
         if (!user) {
           res.status(404).json({ message: 'No user found with this id' });
@@ -75,9 +86,13 @@ const userController = {
 
   // POST add a friend to a user's friend list
   addFriend({ params }, res) {
+    const { userId, friendId } = params;
+    const objectIdUserId = new ObjectId(userId);
+    const objectIdFriendId = new ObjectId(friendId);
+
     User.findByIdAndUpdate(
-      params.userId,
-      { $addToSet: { friends: params.friendId } },
+      objectIdUserId,
+      { $addToSet: { friends: objectIdFriendId } },
       { new: true, runValidators: true }
     )
       .then(user => {
@@ -95,11 +110,15 @@ const userController = {
 
   // DELETE remove a friend from a user's friend list
   removeFriend({ params }, res) {
+    const { userId, friendId } = params;
+    const objectIdUserId = new ObjectId(userId);
+    const objectIdFriendId = new ObjectId(friendId);
+
     User.findByIdAndUpdate(
-      params.userId,
-      { $pull: { friends: params.friendId } },
+      objectIdUserId,
+      { $pull: { friends: objectIdFriendId } },
       { new: true, runValidators: true }
-    )
+      )
       .then(user => {
         if (!user) {
           res.status(404).json({ message: 'No user found with this id' });
@@ -111,7 +130,7 @@ const userController = {
         console.log(err);
         res.status(400).json(err);
       });
-  }
-};
-
-module.exports = userController;
+    }
+  };
+  
+  module.exports = userController;

@@ -1,5 +1,5 @@
 const { Reaction } = require('../models');
-
+const { Thought } = require('../models');
 const reactionController = {
   // POST add a reaction to a thought
   addReaction({ params, body }, res) {

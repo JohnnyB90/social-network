@@ -49,7 +49,28 @@ const reactionController = {
         console.log(err);
         res.status(400).json(err);
       });
-  }
+  },
+
+ // PUT update a reaction
+ updateReaction({ params, body }, res) {
+  console.log('Updating reaction...');
+  Reaction.findByIdAndUpdate(
+    params.reactionId,
+    body,
+    { new: true, runValidators: true }
+  )
+    .then(updatedReaction => {
+      if (!updatedReaction) {
+        res.status(404).json({ message: 'No reaction found with this id' });
+        return;
+      }
+      res.json(updatedReaction);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+}
 };
 
 module.exports = reactionController;

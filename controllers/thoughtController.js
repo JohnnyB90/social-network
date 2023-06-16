@@ -59,24 +59,24 @@ const thoughtController = {
       });
   },
 
-  // PUT update a thought by id
-  updateThought({ params, body }, res) {
-    const thoughtId = params.thoughtId;
-    const objectIdThoughtId = new ObjectId(thoughtId);
+// PUT update a thought by id
+updateThought({ params, body }, res) {
+  const thoughtId = params.thoughtId;
+  const objectIdThoughtId = new ObjectId(thoughtId);
 
-    Thought.findByIdAndUpdate(objectIdThoughtId, body, { new: true, runValidators: true })
-      .then((thought) => {
-        if (!thought) {
-          res.status(404).json({ message: 'No thought found with this id!' });
-          return;
-        }
-        res.json({ message: 'Thought updated successfully!' });
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
-  },
+  Thought.findByIdAndUpdate(objectIdThoughtId, body, { new: true })
+    .then((thought) => {
+      if (!thought) {
+        res.status(404).json({ message: 'No thought found with this id!' });
+        return;
+      }
+      res.json({ message: 'Thought updated successfully!' });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+},
 
 // DELETE remove a thought by id
 deleteThought({ params }, res) {

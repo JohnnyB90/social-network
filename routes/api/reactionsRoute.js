@@ -3,7 +3,8 @@ const {
   addReaction,
   removeReaction,
   updateReaction,
-  getReactions
+  getReactions,
+  getReactionById
 } = require('../../controllers/reactionController');
 
 // POST add a reaction to a thought
@@ -19,5 +20,8 @@ router.delete('/:thoughtId/reactions/:reactionId', removeReaction);
 
 // GET get all reactions
 router.get('/', getReactions);
+
+// GET get a reaction by id
+router.get('/:reactionId', getReactionById);
 
 module.exports = router;

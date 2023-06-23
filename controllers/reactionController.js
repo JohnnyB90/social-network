@@ -105,8 +105,30 @@ getReactions(req, res) {
       console.log(err);
       res.status(500).json(err);
     });
-}
+},
 
+// Get reaction by ID
+getReactionById({ params }, res) {
+  Thought.findOne({ 'reactions._id': params.reactionId })
+    .select('reactions')
+    .then(thought => {
+      if (!thought) {
+        res.status(404).json({ message: 'No reaction found with this id' });
+        return;
+      }
+      const reaction = thought.reactions.find(reaction => reaction._id.toString() === params.reactionId);
+      if (!reaction) {
+        res.status(404).json({ message: 'No reaction found with this id' });
+        return;
+      }
+      res.json(reaction);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+}
 };
+
 
 module.exports = reactionController;
